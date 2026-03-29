@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecurePass Generator - 安全なパスワードを生成</title>
+    <meta name="description" content="強力でセキュアなパスワードをワンクリックで生成。カスタマイズ可能なオプションで最適なパスワードを作成しましょう。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="bg-particles" id="bgParticles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <path d="M14 2L3 7v7c0 6.075 4.925 11 11 11s11-4.925 11-11V7L14 2z" fill="url(#shield-gradient)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                        <path d="M10 14l3 3 5-6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="shield-gradient" x1="3" y1="2" x2="25" y2="25">
+                                <stop stop-color="#6366f1"/>
+                                <stop offset="1" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">SecurePass</span>
+            </div>
+            <nav class="header-nav">
+                <a href="#generator" class="nav-link active">ジェネレーター</a>
+                <a href="#tips" class="nav-link">セキュリティTips</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="hero" id="generator">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    無料で使えるパスワード生成ツール
+                </div>
+                <h1 class="hero-title">
+                    安全な<span class="gradient-text">パスワード</span>を<br>瞬時に生成
+                </h1>
+                <p class="hero-subtitle">
+                    ハッキングに強い、ランダムで複雑なパスワードを簡単に作成できます
+                </p>
+            </div>
+
+            <!-- Password Generator Card -->
+            <div class="generator-card" id="generatorCard">
+                <div class="card-glow"></div>
+                
+                <!-- Generated Password Display -->
+                <div class="password-display" id="passwordDisplay">
+                    <div class="password-text-wrapper">
+                        <span class="password-text" id="passwordText">生成中...</span>
+                    </div>
+                    <div class="password-actions">
+                        <button class="btn-icon" id="copyBtn" title="コピー" aria-label="パスワードをコピー">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                            <span class="copy-tooltip" id="copyTooltip">コピーしました！</span>
+                        </button>
+                        <button class="btn-icon" id="refreshBtn" title="再生成" aria-label="パスワードを再生成">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Strength Indicator -->
+                <div class="strength-section">
+                    <div class="strength-bar-container">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div class="strength-info">
+                        <span class="strength-label" id="strengthLabel">強い</span>
+                        <span class="strength-detail" id="strengthDetail">解読に約1000年</span>
+                    </div>
+                </div>
+
+                <!-- Password Length -->
+                <div class="control-section">
+                    <div class="control-header">
+                        <label class="control-label" for="lengthSlider">パスワードの長さ</label>
+                        <div class="length-display">
+                            <button class="btn-adjust" id="lengthMinus" aria-label="長さを減らす">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                            <span class="length-value" id="lengthValue">16</span>
+                            <button class="btn-adjust" id="lengthPlus" aria-label="長さを増やす">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="lengthSlider" min="4" max="64" value="16" class="slider" aria-label="パスワードの長さ">
+                        <div class="slider-track-fill" id="sliderFill"></div>
+                    </div>
+                    <div class="slider-labels">
+                        <span>4</span>
+                        <span>64</span>
+                    </div>
+                </div>
+
+                <!-- Character Options -->
+                <div class="options-section">
+                    <div class="options-title">使用する文字</div>
+                    <div class="options-grid">
+                        <label class="option-card" id="optUppercase">
+                            <div class="option-info">
+                                <span class="option-icon">Aa</span>
+                                <div class="option-text">
+                                    <span class="option-name">大文字・小文字</span>
+                                    <span class="option-desc">A-Z, a-z</span>
+                                </div>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="toggleUppercase" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+
+                        <label class="option-card" id="optNumbers">
+                            <div class="option-info">
+                                <span class="option-icon">123</span>
+                                <div class="option-text">
+                                    <span class="option-name">数字</span>
+                                    <span class="option-desc">0-9</span>
+                                </div>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="toggleNumbers" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+
+                        <label class="option-card" id="optSymbols">
+                            <div class="option-info">
+                                <span class="option-icon">!@#</span>
+                                <div class="option-text">
+                                    <span class="option-name">記号</span>
+                                    <span class="option-desc">!@#$%^&*</span>
+                                </div>
+                            </div>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="toggleSymbols" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <button class="btn-generate" id="generateBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+                    </svg>
+                    パスワードを生成
+                </button>
+
+                <!-- Multiple Passwords -->
+                <div class="multi-passwords" id="multiPasswords">
+                    <div class="multi-header" id="multiHeader">
+                        <span class="multi-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="8" y1="6" x2="21" y2="6"/>
+                                <line x1="8" y1="12" x2="21" y2="12"/>
+                                <line x1="8" y1="18" x2="21" y2="18"/>
+                                <line x1="3" y1="6" x2="3.01" y2="6"/>
+                                <line x1="3" y1="12" x2="3.01" y2="12"/>
+                                <line x1="3" y1="18" x2="3.01" y2="18"/>
+                            </svg>
+                            候補をもっと見る
+                        </span>
+                        <svg class="multi-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </div>
+                    <div class="multi-list" id="multiList"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Tips Section -->
+        <section class="tips-section" id="tips">
+            <div class="section-container">
+                <h2 class="section-title">セキュリティ <span class="gradient-text">Tips</span></h2>
+                <p class="section-subtitle">安全なパスワードを作成するためのベストプラクティス</p>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0110 0v4"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">12文字以上を使用</h3>
+                        <p class="tip-desc">パスワードが長ければ長いほど、解読に必要な時間が指数関数的に増加します。最低でも12文字以上を推奨します。</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">文字の種類を混ぜる</h3>
+                        <p class="tip-desc">大文字、小文字、数字、記号を組み合わせることで、パスワードの強度が大幅に向上します。</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">個人情報を避ける</h3>
+                        <p class="tip-desc">名前、誕生日、電話番号など、推測されやすい個人情報をパスワードに使用しないでください。</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="23 4 23 10 17 10"/>
+                                <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">使い回しをしない</h3>
+                        <p class="tip-desc">各サービスで異なるパスワードを使用しましょう。一つが漏洩しても他のアカウントが守られます。</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">パスワードマネージャー</h3>
+                        <p class="tip-desc">すべてのパスワードを覚える必要はありません。信頼できるパスワードマネージャーで安全に管理しましょう。</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                            </svg>
+                        </div>
+                        <h3 class="tip-title">定期的に変更する</h3>
+                        <p class="tip-desc">3〜6ヶ月に一度、重要なアカウントのパスワードを変更することで、セキュリティを維持できます。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="section-container">
+                <h2 class="section-title">よくある<span class="gradient-text">質問</span></h2>
+                <div class="faq-list">
+                    <div class="faq-item" id="faq1">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faqAnswer1">
+                            <span>パスワードジェネレーターとは何ですか？</span>
+                            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faqAnswer1">
+                            <p>パスワードジェネレーターは、ランダムで安全なパスワードを自動的に生成するツールです。アルゴリズムを使用して、数字、記号、文字の組み合わせに基づいて強力でユニークなパスワードを作成します。推測やハッキングが困難な、最も安全なパスワードを生成するように設計されています。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" id="faq2">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faqAnswer2">
+                            <span>なぜパスワードジェネレーターを使うべきですか？</span>
+                            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faqAnswer2">
+                            <p>人間が作成するパスワードは、無意識のうちにパターンや個人情報を含みがちです。パスワードジェネレーターは完全にランダムなパスワードを生成するため、辞書攻撃やブルートフォース攻撃に対して非常に強い耐性を持ちます。また、各アカウントごとに異なる複雑なパスワードを簡単に作成できます。</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" id="faq3">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faqAnswer3">
+                            <span>強いパスワードとは何ですか？</span>
+                            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faqAnswer3">
+                            <p>強いパスワードの条件は以下の通りです：<br>• 12文字以上の長さ<br>• 大文字と小文字の両方を含む<br>• 少なくとも1つの数字と記号を含む<br>• 辞書にある実際の単語を使わない<br>• 個人情報（名前、誕生日など）を含まない<br>• 他のアカウントのパスワードと異なる</p>
+                        </div>
+                    </div>
+                    <div class="faq-item" id="faq4">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faqAnswer4">
+                            <span>このツールは安全ですか？</span>
+                            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" id="faqAnswer4">
+                            <p>はい。このパスワードジェネレーターはすべての処理をお使いのブラウザ内で行います。生成されたパスワードがサーバーに送信されたり保存されることは一切ありません。Web Crypto APIを使用した暗号学的に安全な乱数生成を採用しており、予測不可能な真にランダムなパスワードを生成します。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-logo">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+                        <path d="M14 2L3 7v7c0 6.075 4.925 11 11 11s11-4.925 11-11V7L14 2z" fill="url(#shield-gradient-footer)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                        <path d="M10 14l3 3 5-6" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="shield-gradient-footer" x1="3" y1="2" x2="25" y2="25">
+                                <stop stop-color="#6366f1"/>
+                                <stop offset="1" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">SecurePass</span>
+            </div>
+            <p class="footer-text">© 2026 SecurePass Generator. すべてのパスワード生成はブラウザ内で完結します。</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
